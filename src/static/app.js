@@ -1,86 +1,92 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const activitiesList = document.getElementById("activities-list");
-  const activitySelect = document.getElementById("activity");
-  const signupForm = document.getElementById("signup-form");
-  const messageDiv = document.getElementById("message");
+document.addEventListener('DOMContentLoaded', () => {
+  // Sample activities data with participants arrays
+  const activities = [
+    { id: 'chess', name: 'Chess Club', desc: 'Strategy, tournaments and fun.', participants: ['alice@mergington.edu'] },
+    { id: 'robotics', name: 'Robotics Team', desc: 'Build and program robots.', participants: [] },
+    { id: 'drama', name: 'Drama Club', desc: 'Acting, improv, and stagecraft.', participants: ['bob@mergington.edu', 'carol@mergington.edu'] },
+  ];
 
-  // Function to fetch activities from API
-  async function fetchActivities() {
-    try {
-      const response = await fetch("/activities");
-      const activities = await response.json();
+  const listEl = document.getElementById('activities-list');
+  const template = document.getElementById('activity-template');
+  const selectEl = document.getElementById('activity');
+  const form = document.getElementById('signup-form');
+  const emailInput = document.getElementById('email');
+  const messageEl = document.getElementById('message');
 
-      // Clear loading message
-      activitiesList.innerHTML = "";
+  function renderActivities() {
+    listEl.innerHTML = '';
+    activities.forEach(act => {
+      const node = template.content.cloneNode(true);
+      node.querySelector('.activity-name').textContent = act.name;
+      node.querySelector('.activity-desc').textContent = act.desc;
+      node.querySelector('.activity-meta').textContent = `${act.participants.length} participant${act.participants.length === 1 ? '' : 's'}`;
 
-      // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
-
-        activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
-      });
-    } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
-      console.error("Error fetching activities:", error);
-    }
-  }
-
-  // Handle form submission
-  signupForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const activity = document.getElementById("activity").value;
-
-    try {
-      const response = await fetch(
-        `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
-        {
-          method: "POST",
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok) {
-        messageDiv.textContent = result.message;
-        messageDiv.className = "success";
-        signupForm.reset();
+      const ul = node.querySelector('.participants-list');
+      const noParticipants = node.querySelector('.no-participants');
+      ul.innerHTML = '';
+      if (act.participants.length === 0) {
+        noParticipants.style.display = 'block';
       } else {
-        messageDiv.textContent = result.detail || "An error occurred";
-        messageDiv.className = "error";
+        noParticipants.style.display = 'none';
+        act.participants.forEach(p => {
+          const li = document.createElement('li');
+          li.textContent = p;
+          ul.appendChild(li);
+        });
       }
 
-      messageDiv.classList.remove("hidden");
+      listEl.appendChild(node);
+    });
+  }
 
-      // Hide message after 5 seconds
-      setTimeout(() => {
-        messageDiv.classList.add("hidden");
-      }, 5000);
-    } catch (error) {
-      messageDiv.textContent = "Failed to sign up. Please try again.";
-      messageDiv.className = "error";
-      messageDiv.classList.remove("hidden");
-      console.error("Error signing up:", error);
+  function populateSelect() {
+    // keep the placeholder option, then append options
+    // remove old options except first placeholder
+    while (selectEl.options.length > 1) selectEl.remove(1);
+    activities.forEach(act => {
+      const opt = document.createElement('option');
+      opt.value = act.id;
+      opt.textContent = `${act.name} (${act.participants.length})`;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim().toLowerCase();
+    const activityId = selectEl.value;
+    if (!email || !activityId) {
+      showMessage('Please enter an email and choose an activity.', 'error');
+      return;
     }
+
+    const act = activities.find(a => a.id === activityId);
+    if (!act) {
+      showMessage('Selected activity not found.', 'error');
+      return;
+    }
+
+    if (act.participants.includes(email)) {
+      showMessage('This email is already signed up for that activity.', 'info');
+      return;
+    }
+
+    act.participants.push(email);
+    renderActivities();
+    populateSelect();
+    showMessage(`Signed up ${email} for ${act.name}.`, 'success');
+    form.reset();
   });
 
-  // Initialize app
-  fetchActivities();
+  function showMessage(text, type = 'info') {
+    messageEl.className = '';
+    messageEl.classList.add(type === 'success' ? 'msg-success' : type === 'error' ? 'msg-error' : 'msg-info');
+    messageEl.textContent = text;
+    messageEl.style.display = 'block';
+    setTimeout(() => (messageEl.style.display = 'none'), 4000);
+  }
+
+  // initial render
+  renderActivities();
+  populateSelect();
 });

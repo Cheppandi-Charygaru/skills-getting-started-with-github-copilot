@@ -19,6 +19,22 @@
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
         </div>
+
+        <!-- Template for an activity card (used by app.js) -->
+        <template id="activity-template">
+          <article class="activity-card">
+            <header class="activity-header">
+              <h4 class="activity-name"></h4>
+              <span class="activity-meta"></span>
+            </header>
+            <p class="activity-desc"></p>
+            <div class="participants-section">
+              <strong>Participants</strong>
+              <ul class="participants-list"></ul>
+              <p class="no-participants muted">No participants yet</p>
+            </div>
+          </article>
+        </template>
       </section>
 
       <section id="signup-container">
