@@ -58,82 +58,142 @@ section h3 {
 }
 
 .activity-card {
-  margin-bottom: 15px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  background: linear-gradient(180deg, #ffffff, #fbfbff);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 4px 10px rgba(16, 24, 40, 0.03);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
-.activity-card h4 {
-  margin-bottom: 10px;
-  color: #0066cc;
+.activity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
 }
 
-.activity-card p {
-  margin-bottom: 8px;
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
 }
 
-.form-group {
-  margin-bottom: 15px;
+.activity-name {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #0f172a;
 }
 
-.form-group label {
+.activity-meta {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.activity-desc {
+  margin: 8px 0 12px 0;
+  color: #334155;
+}
+
+.participants-section {
+  border-top: 1px dashed #e6eef8;
+  padding-top: 10px;
+}
+
+.participants-section strong {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 8px;
+  color: #0b2545;
 }
 
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+.participants-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #0b2545;
 }
 
-button {
-  background-color: #1a237e;
-  color: white;
+.participants-list li {
+  margin: 4px 0;
+  line-height: 1.4;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.participant-item {
+  flex: 1;
+}
+
+.delete-btn {
+  background: none;
   border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
+  color: #dc2626;
   cursor: pointer;
-  transition: background-color 0.2s;
+  padding: 4px 8px;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
 }
 
-button:hover {
-  background-color: #3949ab;
+.delete-btn:hover {
+  opacity: 0.7;
 }
 
-.message {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 4px;
+.delete-btn:active {
+  opacity: 0.5;
 }
 
-.success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #a5d6a7;
+/* small muted helper when no participants */
+.no-participants {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
-.error {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
+.muted {
+  display: block;
 }
 
-.info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
-}
-
-.hidden {
+/* message styles */
+#message {
   display: none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.msg-success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #bbf7d0;
+}
+
+.msg-error {
+  background: #fff1f2;
+  color: #9f1239;
+  border: 1px solid #fecaca;
+}
+
+.msg-info {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
+
+/* Responsive layout hint */
+@media (min-width: 700px) {
+  #activities-container {
+    max-width: 720px;
+  }
 }
 
 footer {
