@@ -118,7 +118,37 @@ section h3 {
 .participants-list li {
   margin: 4px 0;
   line-height: 1.4;
-  list-style-type: disc;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.participant-item {
+  flex: 1;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 0.7;
+}
+
+.delete-btn:active {
+  opacity: 0.5;
 }
 
 /* small muted helper when no participants */
